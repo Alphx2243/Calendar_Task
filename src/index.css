@@ -1,0 +1,335 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #022f56;
+  --cal-bg: #041a25;
+  --accent: #27a2e2;
+  --text-main: #ffffff;
+  --border-muted: #323543;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  background-image: radial-gradient(circle at top right, #353844, var(--bg-color));
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  overflow-x: hidden;
+}
+
+.calendar-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 88px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 10px 20px rgba(0, 0, 0, 0.4);
+  background: var(--cal-bg);
+  margin-top: 20px;
+}
+
+.spiral-container {
+  position: absolute;
+  top: -12px;
+  left: 5%;
+  right: 5%;
+  display: flex;
+  justify-content: space-around;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.spiral-ring {
+  width: 14px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, #d1d5db, #9ca3af 40%, #4b5563 80%, #5d646d);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-container {
+  position: relative;
+  height: clamp(250px, 40vh, 420px);
+  width: 100%;
+  background-color: #1a1c23;
+  overflow: hidden;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  opacity: 0.95;
+}
+
+.shape-overlay {
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 100%;
+  height: clamp(100px, 20vw, 160px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.shape-accent {
+  fill: var(--accent);
+}
+
+.shape-base {
+  fill: var(--cal-bg);
+}
+
+.month-display {
+  position: absolute;
+  right: 6%;
+  bottom: 0px;
+  text-align: right;
+  z-index: 5;
+}
+
+.month-display .year {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #00c8ff;
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.month-display .month {
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 800;
+  color: #00c8ff;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
+.nav-buttons {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  gap: 1rem;
+  z-index: 3;
+}
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.05);
+}
+
+.calendar-body {
+  display: flex;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+  gap: clamp(2rem, 5vw, 4rem);
+  background: var(--cal-bg);
+}
+
+.notes-section {
+  flex: 0 0 280px;
+  display: flex;
+  flex-direction: column;
+}
+
+.notes-header {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-main);
+}
+
+.notes-lines {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.notes-textarea {
+  background: transparent;
+  border: none;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  color: var(--text-main);
+  font-size: 1rem;
+  line-height: 2.2;
+  resize: none;
+  background-image: repeating-linear-gradient(transparent, transparent calc(2.2em - 1px), var(--border-muted) calc(2.2em - 1px), var(--border-muted) 2.2em);
+  outline: none;
+}
+
+.grid-section {
+  flex: 1;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.weekday {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.weekday.weekend {
+  color: var(--accent);
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.day-cell {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 400;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  user-select: none;
+  z-index: 1;
+}
+
+.day-cell.current-month {
+  color: var(--text-main);
+}
+
+.day-cell.other-month {
+  color: var(--border-muted);
+  pointer-events: none;
+}
+
+.day-cell.weekend.current-month {
+  color: var(--accent);
+}
+
+.day-cell:hover.current-month:not(.selected) {
+  background: rgba(54, 141, 192, 0.482);
+}
+
+.day-cell.today {
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.day-cell.has-note::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  width: 4px;
+  height: 4px;
+  background-color: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.day-cell.selected.has-note::after {
+  background-color: white;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.day-cell.selected {
+  background: var(--accent);
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(39, 162, 226, 0.4);
+  z-index: 2;
+}
+
+@media (max-width: 900px) {
+  .calendar-wrapper {
+    max-width: 95%;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-body {
+    flex-direction: column-reverse;
+    padding: 1.5rem;
+    gap: 2.5rem;
+  }
+
+  .notes-section {
+    flex: none;
+    border-top: 1px solid var(--border-muted);
+    padding-top: 1.5rem;
+  }
+
+  .month-display {
+    right: auto;
+    left: 1.5rem;
+    bottom: 1rem;
+    text-align: left;
+  }
+
+  .nav-buttons {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .spiral-container {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .days-grid {
+    gap: 2px;
+  }
+
+  .day-cell {
+    font-size: 0.95rem;
+  }
+
+  .hero-container {
+    height: 200px;
+  }
+
+  .month-display .month {
+    font-size: 2.5rem;
+  }
+}
