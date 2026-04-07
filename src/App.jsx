@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import {
   format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek,
   endOfWeek, isSameMonth, isSameDay, eachDayOfInterval, isBefore,
-  startOfToday
+  isWithinInterval, startOfToday
 } from 'date-fns';
 import { ChevronLeft, ChevronRight, NotebookPen } from 'lucide-react';
 import './index.css';
@@ -10,6 +10,8 @@ import './index.css';
 const App = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(startOfToday());
+  const [rangeStart, setRangeStart] = useState(null);
+  const [rangeEnd, setRangeEnd] = useState(null);
   const [notes, setNotes] = useState(() => {
     const saved = localStorage.getItem('calendar-notes');
     return saved ? JSON.parse(saved) : {};
@@ -25,6 +27,17 @@ const App = () => {
 
   const onDateClick = (day) => {
     setSelectedDate(day);
+    if (!rangeStart || (rangeStart && rangeEnd)) {
+      setRangeStart(day);
+      setRangeEnd(null);
+    } else if (rangeStart && !rangeEnd) {
+      if (isBefore(day, rangeStart)) {
+        setRangeStart(day);
+        setRangeEnd(null);
+      } else {
+        setRangeEnd(day);
+      }
+    }
   };
 
   const calendarDays = useMemo(() => {
@@ -58,7 +71,12 @@ const App = () => {
     if (!isSameMonth(day, currentMonth)) classes.push('other-month');
     else classes.push('current-month');
     if (isSameDay(day, today)) classes.push('today');
-    if (isSameDay(day, selectedDate)) classes.push('selected');
+    if (isSameDay(day, selectedDate) || (rangeStart && isSameDay(day, rangeStart)) || (rangeEnd && isSameDay(day, rangeEnd))) {
+      classes.push('selected');
+    }
+    if (rangeStart && rangeEnd && isWithinInterval(day, { start: rangeStart, end: rangeEnd })) {
+      classes.push('in-range');
+    }
     const dKey = format(day, 'yyyy-MM-dd');
     if (notes[dKey]) classes.push('has-note');
     const dayOfWeek = day.getDay();

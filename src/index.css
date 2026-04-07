@@ -279,6 +279,10 @@ body {
   z-index: 2;
 }
 
+.day-cell.in-range {
+  background-color: rgba(39, 162, 226, 0.3);
+}
+
 @media (max-width: 900px) {
   .calendar-wrapper {
     max-width: 95%;
